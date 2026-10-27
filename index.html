@@ -1,0 +1,434 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TimeTales — Meet Your Future Self</title>
+<style>
+:root {
+  --bg:#0b0c14;
+  --card:#141622;
+  --border:#292b3d;
+  --text:#f4f3ff;
+  --muted:#a4a5bd;
+  --purple:#a78bfa;
+  --pink:#f0abfc;
+}
+* { box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  margin:0;
+  color:var(--text);
+  background:var(--bg);
+  font-family:Inter,system-ui,-apple-system,sans-serif;
+}
+button,input,textarea,select { font:inherit; }
+button { cursor:pointer; }
+.container { width:min(1050px,90%);margin:auto; }
+nav {
+  height:75px;display:flex;justify-content:space-between;
+  align-items:center;border-bottom:1px solid var(--border);
+}
+.logo { font-size:22px;font-weight:850;letter-spacing:-1px; }
+.logo span { color:var(--purple); }
+nav a { color:var(--muted);text-decoration:none;font-size:14px; }
+.hero {
+  padding:85px 0 65px;
+  display:grid;grid-template-columns:1.2fr .8fr;
+  gap:30px;align-items:center;
+}
+.tag {
+  display:inline-block;border:1px solid #a78bfa55;
+  color:var(--purple);background:#a78bfa12;
+  padding:7px 12px;border-radius:30px;font-size:12px;
+  letter-spacing:1px;
+}
+h1 {
+  font-size:clamp(44px,7vw,76px);
+  line-height:1.04;letter-spacing:-4px;margin:22px 0;
+}
+.gradient {
+  background:linear-gradient(100deg,var(--purple),var(--pink));
+  color:transparent;background-clip:text;
+}
+.lead { color:var(--muted);font-size:17px;line-height:1.8;max-width:490px; }
+.actions { display:flex;flex-wrap:wrap;gap:12px;margin-top:28px; }
+.btn {
+  border:0;border-radius:10px;padding:13px 18px;
+  font-weight:750;transition:.2s;
+}
+.btn:hover { transform:translateY(-2px); }
+.primary { background:var(--purple);color:#151020; }
+.secondary { background:#ffffff08;border:1px solid var(--border);color:white; }
+.visual {
+  height:330px;position:relative;display:grid;place-items:center;
+}
+.planet {
+  height:220px;width:220px;border-radius:50%;
+  background:radial-gradient(circle at 30% 25%,#f2d5ff,#a78bfa 35%,#45417d 75%,#24213f);
+  box-shadow:0 0 90px #a78bfa25,inset -25px -20px 45px #171329;
+  animation:float 5s ease-in-out infinite;
+}
+.ring {
+  position:absolute;width:300px;height:90px;
+  border:2px solid #c4b5fd99;border-radius:50%;
+  transform:rotate(-20deg);
+}
+.orbit {
+  position:absolute;top:35px;right:12%;font-size:30px;
+  animation:float 4s ease-in-out infinite;
+}
+.note {
+  position:absolute;bottom:30px;left:0;
+  background:#191a2b;border:1px solid var(--border);
+  padding:14px 17px;border-radius:12px;font-size:13px;
+}
+@keyframes float { 50% { transform:translateY(-10px); } }
+.stats {
+  display:grid;grid-template-columns:repeat(3,1fr);
+  border:1px solid var(--border);border-radius:15px;
+  background:var(--card);padding:20px;text-align:center;gap:10px;
+}
+.stat strong { display:block;font-size:23px; }
+.stat span { font-size:12px;color:var(--muted); }
+section { padding:60px 0 0; }
+.section-head { margin-bottom:25px; }
+.section-head h2 { font-size:32px;letter-spacing:-1.5px;margin:0 0 8px; }
+.section-head p { color:var(--muted);margin:0; }
+.prompts {
+  display:grid;grid-template-columns:repeat(3,1fr);gap:15px;
+}
+.prompt {
+  padding:22px;background:var(--card);
+  border:1px solid var(--border);border-radius:14px;
+  text-align:left;color:var(--text);transition:.2s;
+}
+.prompt:hover { border-color:var(--purple);transform:translateY(-3px); }
+.prompt .symbol { font-size:27px;color:var(--purple); }
+.prompt h3 { margin:14px 0 7px; }
+.prompt p { margin:0;color:var(--muted);font-size:14px;line-height:1.7; }
+.panel {
+  display:grid;grid-template-columns:.8fr 1.2fr;gap:35px;
+  padding:30px;border:1px solid var(--border);
+  border-radius:18px;background:var(--card);
+}
+.panel h2 { font-size:34px;line-height:1.2;letter-spacing:-1px; }
+.panel p { color:var(--muted);line-height:1.8; }
+form { display:grid;gap:15px; }
+label { display:grid;gap:7px;font-size:13px;color:#d9d5f3; }
+.field {
+  width:100%;background:var(--bg);color:var(--text);
+  border:1px solid var(--border);border-radius:9px;
+  padding:12px;outline:none;
+}
+.field:focus { border-color:var(--purple); }
+textarea { resize:vertical; }
+.formrow { display:grid;grid-template-columns:1fr 1fr;gap:12px; }
+.message { color:#86efac;font-size:13px;min-height:18px; }
+.hint { color:var(--muted);font-size:12px; }
+.capsules {
+  display:grid;grid-template-columns:repeat(3,1fr);gap:15px;
+}
+.capsule {
+  padding:20px;background:var(--card);
+  border:1px solid var(--border);border-radius:14px;
+  overflow-wrap:anywhere;
+}
+.capsule h3 { margin:12px 0 8px; }
+.capsule p { color:var(--muted);white-space:pre-wrap;line-height:1.7; }
+.status { color:var(--purple);font-size:12px;font-weight:700; }
+.delete {
+  margin-top:12px;background:transparent;color:#fca5a5;
+  border:1px solid #713c4b;padding:8px 10px;border-radius:8px;
+}
+.empty {
+  grid-column:1/-1;text-align:center;padding:35px 15px;
+  border:1px dashed var(--border);border-radius:14px;color:var(--muted);
+}
+footer {
+  margin-top:80px;padding:25px 0;border-top:1px solid var(--border);
+  color:var(--muted);font-size:13px;
+  display:flex;justify-content:space-between;gap:15px;flex-wrap:wrap;
+}
+@media(max-width:720px) {
+  .hero,.panel { grid-template-columns:1fr; }
+  .hero { padding-top:55px; }
+  .visual { height:270px; }
+  .planet { width:180px;height:180px; }
+  .ring { width:245px;height:75px; }
+  .prompts { grid-template-columns:1fr; }
+  .capsules { grid-template-columns:repeat(2,minmax(0,1fr)); }
+}
+@media(max-width:460px) {
+  h1 { letter-spacing:-2.5px; }
+  .stats { padding:15px 5px; }
+  .stat strong { font-size:19px; }
+  .capsules { grid-template-columns:1fr; }
+  .panel { padding:20px; }
+  .formrow { grid-template-columns:1fr; }
+}
+</style>
+</head>
+<body>
+
+<header class="container">
+  <nav>
+    <a href="#home" class="logo">Time<span>Tales.</span></a>
+    <a href="#archive">My capsules ↓</a>
+  </nav>
+</header>
+
+<main>
+<div class="container">
+  <section class="hero" id="home">
+    <div>
+      <span class="tag">A LITTLE MESSAGE THROUGH TIME</span>
+      <h1>Your life.<br>Your story.<br><span class="gradient">Your future.</span></h1>
+      <p class="lead">Write a message to the person you're becoming. Save today's thoughts, dreams and predictions. Open them when the time is right.</p>
+      <div class="actions">
+        <button class="btn primary" onclick="go('create')">Create a capsule ↗</button>
+        <button class="btn secondary" onclick="randomPrompt()">Surprise me ✦</button>
+      </div>
+    </div>
+    <div class="visual" aria-hidden="true">
+      <div class="planet"></div>
+      <div class="ring"></div>
+      <div class="orbit">✦</div>
+      <div class="note">✉ A message from the present<br><span style="color:#a4a5bd">Waiting for the future...</span></div>
+    </div>
+  </section>
+
+  <div class="stats">
+    <div class="stat"><strong id="total">0</strong><span>CAPSULES CREATED</span></div>
+    <div class="stat"><strong id="opened">0</strong><span>READY TO OPEN</span></div>
+    <div class="stat"><strong id="waiting">0</strong><span>STILL WAITING</span></div>
+  </div>
+
+  <section id="ideas">
+    <div class="section-head">
+      <h2>Start with a thought.</h2>
+      <p>Pick a prompt to get the words flowing.</p>
+    </div>
+    <div class="prompts">
+      <button class="prompt" onclick="choose('A letter to myself','What is happening in my life right now? What do I want future-me to remember?')">
+        <div class="symbol">↗</div><h3>A letter to myself</h3>
+        <p>Capture who you are and what matters to you today.</p>
+      </button>
+      <button class="prompt" onclick="choose('My future prediction','One year from now, I predict that... The thing most likely to surprise me is...')">
+        <div class="symbol">◎</div><h3>A future prediction</h3>
+        <p>Make a guess about where life is taking you.</p>
+      </button>
+      <button class="prompt" onclick="choose('A promise to myself','Something I want to change is... One small action I can take is...')">
+        <div class="symbol">◇</div><h3>A promise</h3>
+        <p>Leave a commitment for the person you will become.</p>
+      </button>
+    </div>
+  </section>
+
+  <section id="create">
+    <div class="panel">
+      <div>
+        <span class="tag">THE PRESENT, PRESERVED</span>
+        <h2>Leave something for later.</h2>
+        <p>It doesn't have to be profound. Sometimes a small detail from today becomes a memory worth keeping tomorrow.</p>
+        <p>Choose a date, write your note, and let time do the rest.</p>
+      </div>
+
+      <form id="form">
+        <label>Capsule title
+          <input class="field" name="title" maxlength="80" placeholder="The summer I won't forget" required>
+        </label>
+        <label>Your message
+          <textarea class="field" name="body" rows="5" maxlength="3000" placeholder="Dear future me..." required></textarea>
+        </label>
+        <div class="formrow">
+          <label>Open on
+            <input class="field" type="date" name="date" id="date" required>
+          </label>
+          <label>Category
+            <select class="field" name="category">
+              <option>Personal</option>
+              <option>Dreams & goals</option>
+              <option>Predictions</option>
+              <option>Friends & family</option>
+              <option>Memories</option>
+            </select>
+          </label>
+        </div>
+        <button class="btn primary" type="submit">Seal my time capsule ✦</button>
+        <div class="message" id="message" role="status"></div>
+        <div class="hint">Your notes are stored locally in this browser. They aren't uploaded to a server.</div>
+      </form>
+    </div>
+  </section>
+
+  <section id="archive">
+    <div class="section-head">
+      <h2>Your time capsules.</h2>
+      <p>Every note is a little piece of your story.</p>
+    </div>
+    <div class="capsules" id="list"></div>
+  </section>
+</div>
+</main>
+
+<footer class="container">
+  <span class="logo">Time<span style="color:var(--purple)">Tales.</span></span>
+  <span>Made for the person you're becoming.</span>
+  <span>© <span id="year"></span> TimeTales</span>
+</footer>
+
+<script>
+const KEY = "timetales_v2";
+const $ = id => document.getElementById(id);
+
+function localDate(date = new Date()) {
+  const copy = new Date(date);
+  copy.setMinutes(copy.getMinutes() - copy.getTimezoneOffset());
+  return copy.toISOString().slice(0, 10);
+}
+
+function futureDate() {
+  const d = new Date();
+  d.setFullYear(d.getFullYear() + 1);
+  return localDate(d);
+}
+
+function getItems() {
+  try {
+    const value = JSON.parse(localStorage.getItem(KEY) || "[]");
+    return Array.isArray(value) ? value : [];
+  } catch {
+    return [];
+  }
+}
+
+function setItems(items) {
+  localStorage.setItem(KEY, JSON.stringify(items));
+}
+
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g, c => ({
+    "&":"&amp;", "<":"&lt;", ">":"&gt;",
+    '"':"&quot;", "'":"&#39;"
+  }[c]));
+}
+
+function go(id) {
+  document.getElementById(id).scrollIntoView({behavior:"smooth"});
+}
+
+function choose(title, body) {
+  $("form").elements.title.value = title;
+  $("form").elements.body.value = body;
+  go("create");
+}
+
+function randomPrompt() {
+  const prompts = [
+    ["A message from today","Right now, the thing taking up most of my thoughts is..."],
+    ["One year from now","I hope my life looks different because..."],
+    ["An honest prediction","Something I think will happen this year is..."],
+    ["Remember this moment","Today, something small that made me happy was..."],
+    ["A future challenge","Something I want to be brave enough to do is..."]
+  ];
+  const item = prompts[Math.floor(Math.random() * prompts.length)];
+  choose(item[0], item[1]);
+}
+
+function formatDate(value) {
+  return new Date(value + "T12:00:00").toLocaleDateString(undefined, {
+    day:"numeric", month:"short", year:"numeric"
+  });
+}
+
+function render() {
+  const items = getItems();
+  const today = localDate();
+  const ready = items.filter(x => x.date <= today).length;
+
+  $("total").textContent = items.length;
+  $("opened").textContent = ready;
+  $("waiting").textContent = items.length - ready;
+
+  if (!items.length) {
+    $("list").innerHTML =
+      '<div class="empty">Nothing here yet. Create your first capsule above.</div>';
+    return;
+  }
+
+  $("list").innerHTML = items.map((item, index) => {
+    const isReady = item.date <= today;
+    return `<article class="capsule">
+      <span class="status">${isReady ? "✦ READY TO OPEN" : "◷ SEALED"}</span>
+      <h3>${escapeHTML(item.title)}</h3>
+      <div class="hint">${escapeHTML(item.category)} · ${formatDate(item.date)}</div>
+      <p>${isReady
+        ? escapeHTML(item.body)
+        : "This message is waiting for its day. Come back on " + formatDate(item.date) + "."}</p>
+      ${isReady
+        ? `<button class="delete" onclick="removeItem(${index})">Delete capsule</button>`
+        : ""}
+    </article>`;
+  }).join("");
+}
+
+function removeItem(index) {
+  const items = getItems();
+  if (!items[index]) return;
+  if (!confirm("Delete this time capsule permanently?")) return;
+  items.splice(index, 1);
+  setItems(items);
+  render();
+}
+
+$("form").addEventListener("submit", event => {
+  event.preventDefault();
+
+  const form = new FormData(event.currentTarget);
+  const title = String(form.get("title") || "").trim();
+  const body = String(form.get("body") || "").trim();
+  const date = String(form.get("date") || "");
+
+  if (!title || !body) {
+    $("message").textContent = "Please add a title and a message.";
+    return;
+  }
+  if (!date || date < localDate()) {
+    $("message").textContent = "Please choose today or a future date.";
+    return;
+  }
+
+  const items = getItems();
+  items.unshift({
+    title,
+    body,
+    date,
+    category: String(form.get("category") || "Personal"),
+    id: Date.now()
+  });
+
+  try {
+    setItems(items);
+  } catch (error) {
+    $("message").textContent = "Couldn't save. Your browser storage may be full or disabled.";
+    return;
+  }
+
+  $("message").textContent = "Your capsule has been saved.";
+  event.currentTarget.reset();
+  $("date").min = localDate();
+  $("date").value = futureDate();
+  render();
+  go("archive");
+});
+
+$("year").textContent = new Date().getFullYear();
+$("date").min = localDate();
+$("date").value = futureDate();
+render();
+</script>
+</body>
+</html>
